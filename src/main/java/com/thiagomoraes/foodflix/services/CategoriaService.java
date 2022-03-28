@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.thiagomoraes.foodflix.domain.Categoria;
 import com.thiagomoraes.foodflix.repositories.CategoriaRepository;
+import com.thiagomoraes.foodflix.services.exception.ObjectNotFoundException;
 
 @Service
 public class CategoriaService {
@@ -15,6 +16,7 @@ public class CategoriaService {
 	private CategoriaRepository repo;
 	public Categoria buscar(Integer id) {
 		Optional<Categoria> obj = repo.findById(id);
-		return obj.orElse(null); 
+		return obj.orElseThrow(() -> new ObjectNotFoundException(
+				 "Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
 	}
 }
