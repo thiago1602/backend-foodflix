@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.thiagomoraes.foodflix.domain.Categoria;
 import com.thiagomoraes.foodflix.domain.Cidade;
+import com.thiagomoraes.foodflix.domain.Client;
+import com.thiagomoraes.foodflix.domain.Endereco;
 import com.thiagomoraes.foodflix.domain.Estado;
 import com.thiagomoraes.foodflix.domain.Produto;
+import com.thiagomoraes.foodflix.domain.enums.TipoClient;
 import com.thiagomoraes.foodflix.repositories.CategoriaRepository;
 import com.thiagomoraes.foodflix.repositories.CidadeRepository;
+import com.thiagomoraes.foodflix.repositories.ClientRepository;
+import com.thiagomoraes.foodflix.repositories.EnderecoRepository;
 import com.thiagomoraes.foodflix.repositories.EstadoRepository;
 import com.thiagomoraes.foodflix.repositories.ProdutoRepository;
 
@@ -27,6 +32,10 @@ public class BackendFoodflixApplication implements CommandLineRunner {
 	private EstadoRepository estadoRepository;
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	@Autowired
+	private ClientRepository clientRepository;
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 	
 	
 	public static void main(String[] args) {
@@ -65,10 +74,17 @@ public class BackendFoodflixApplication implements CommandLineRunner {
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 		
+		Client cli1 = new Client(null, "Thiago", "thiago@gmail.com", "998897799", TipoClient.PESSOAFISICA);
 		
+		cli1.getTelefones().addAll(Arrays.asList("998897799", "998897788"));
 		
+		Endereco e1 = new Endereco(null, "Rua Flores", "250", "Apto 203", "Jardim", "38854", cli1, c1);
+		Endereco e2 = new Endereco(null, "Rua Flor", "250", "Apto 203", "Teo", "38854", cli1, c1);
 		
+		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
 		
+		clientRepository.saveAll(Arrays.asList(cli1));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2));
 	}
 
 }
