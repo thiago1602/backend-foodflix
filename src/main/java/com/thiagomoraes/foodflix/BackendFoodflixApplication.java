@@ -1,5 +1,6 @@
 package com.thiagomoraes.foodflix;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.thiagomoraes.foodflix.domain.Cidade;
 import com.thiagomoraes.foodflix.domain.Client;
 import com.thiagomoraes.foodflix.domain.Endereco;
 import com.thiagomoraes.foodflix.domain.Estado;
+import com.thiagomoraes.foodflix.domain.Pagamento;
+import com.thiagomoraes.foodflix.domain.PagamentoComBoleto;
+import com.thiagomoraes.foodflix.domain.PagamentoComCartao;
+import com.thiagomoraes.foodflix.domain.Pedido;
 import com.thiagomoraes.foodflix.domain.Produto;
+import com.thiagomoraes.foodflix.domain.enums.EstadoPagamento;
 import com.thiagomoraes.foodflix.domain.enums.TipoClient;
 import com.thiagomoraes.foodflix.repositories.CategoriaRepository;
 import com.thiagomoraes.foodflix.repositories.CidadeRepository;
 import com.thiagomoraes.foodflix.repositories.ClientRepository;
 import com.thiagomoraes.foodflix.repositories.EnderecoRepository;
 import com.thiagomoraes.foodflix.repositories.EstadoRepository;
+import com.thiagomoraes.foodflix.repositories.PagamentoRepository;
+import com.thiagomoraes.foodflix.repositories.PedidoRepository;
 import com.thiagomoraes.foodflix.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -36,6 +44,10 @@ public class BackendFoodflixApplication implements CommandLineRunner {
 	private ClientRepository clientRepository;
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
 	
 	
 	public static void main(String[] args) {
@@ -85,6 +97,23 @@ public class BackendFoodflixApplication implements CommandLineRunner {
 		
 		clientRepository.saveAll(Arrays.asList(cli1));
 		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2021 10:32"), cli1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("25/12/2021 10:32"), cli1, e2);
+		
+		Pagamento pag1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pag1);
+		
+		Pagamento pag2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("30/09/2021 00:00"), null );
+		ped2.setPagamento(pag2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+		
+		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pag1, pag2));
+		
 	}
 
 }
