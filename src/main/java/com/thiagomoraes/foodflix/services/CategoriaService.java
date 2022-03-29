@@ -3,10 +3,12 @@ package com.thiagomoraes.foodflix.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.thiagomoraes.foodflix.domain.Categoria;
 import com.thiagomoraes.foodflix.repositories.CategoriaRepository;
+import com.thiagomoraes.foodflix.services.exception.DataIntegryException;
 import com.thiagomoraes.foodflix.services.exception.ObjectNotFoundException;
 
 @Service
@@ -28,5 +30,16 @@ public class CategoriaService {
 	public Categoria update(Categoria obj) {
 		find(obj.getId());
 		return repo.save(obj);
+	}
+	
+	public void delete(Integer id) {
+		find(id);
+		try {
+			repo.deleteById(id);
+		}
+		
+		catch(DataIntegrityViolationException e) {
+			throw new DataIntegryException("Não é possivel excluir uma categoria que possui produtos");
+		}
 	}
 }
