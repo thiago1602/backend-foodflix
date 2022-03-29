@@ -13,6 +13,7 @@ import com.thiagomoraes.foodflix.domain.Cidade;
 import com.thiagomoraes.foodflix.domain.Client;
 import com.thiagomoraes.foodflix.domain.Endereco;
 import com.thiagomoraes.foodflix.domain.Estado;
+import com.thiagomoraes.foodflix.domain.ItemPedido;
 import com.thiagomoraes.foodflix.domain.Pagamento;
 import com.thiagomoraes.foodflix.domain.PagamentoComBoleto;
 import com.thiagomoraes.foodflix.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.thiagomoraes.foodflix.repositories.CidadeRepository;
 import com.thiagomoraes.foodflix.repositories.ClientRepository;
 import com.thiagomoraes.foodflix.repositories.EnderecoRepository;
 import com.thiagomoraes.foodflix.repositories.EstadoRepository;
+import com.thiagomoraes.foodflix.repositories.ItemPedidoRepository;
 import com.thiagomoraes.foodflix.repositories.PagamentoRepository;
 import com.thiagomoraes.foodflix.repositories.PedidoRepository;
 import com.thiagomoraes.foodflix.repositories.ProdutoRepository;
@@ -48,7 +50,8 @@ public class BackendFoodflixApplication implements CommandLineRunner {
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
-	
+	@Autowired
+	private ItemPedidoRepository ItemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(BackendFoodflixApplication.class, args);
@@ -114,6 +117,18 @@ public class BackendFoodflixApplication implements CommandLineRunner {
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pag1, pag2));
 		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p1.getItens().addAll(Arrays.asList(ip3));
+		p1.getItens().addAll(Arrays.asList(ip2));
+		
+		ItemPedidoRepository.saveAll(Arrays.asList(ip1,ip2, ip3));
 	}
 
 }
