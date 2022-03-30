@@ -1,5 +1,6 @@
 package com.thiagomoraes.foodflix.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.thiagomoraes.foodflix.domain.Client;
 import com.thiagomoraes.foodflix.dto.ClientDTO;
+import com.thiagomoraes.foodflix.dto.ClientNewDTO;
 import com.thiagomoraes.foodflix.services.ClientService;
 
 @RestController
@@ -31,6 +34,15 @@ public class ClientResource {
 		Client obj = service.find(id);
 		return ResponseEntity.ok().body(obj);
 		
+	}
+	
+	@RequestMapping(method=RequestMethod.POST)
+	public ResponseEntity<Void> Insert(@Valid @RequestBody ClientNewDTO objDto){
+		Client obj = service.fromDTO(objDto);
+		obj = service.Insert(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").
+				buildAndExpand(obj.getId()).toUri();
+		return ResponseEntity.created(uri).build();		
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
