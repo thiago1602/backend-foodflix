@@ -40,7 +40,7 @@ public class ClientService {
 		}
 		
 		catch(DataIntegrityViolationException e) {
-			throw new DataIntegryException("Não é possivel excluir uma categoria que possui produtos");
+			throw new DataIntegryException("Não é possivel excluir porque há entidades relacionadas");
 		}
 	}
 	

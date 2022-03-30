@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.thiagomoraes.foodflix.domain.Categoria;
+import com.thiagomoraes.foodflix.domain.Client;
 import com.thiagomoraes.foodflix.dto.CategoriaDTO;
 import com.thiagomoraes.foodflix.repositories.CategoriaRepository;
 import com.thiagomoraes.foodflix.services.exception.DataIntegryException;
@@ -33,7 +34,8 @@ public class CategoriaService {
 	}
 	
 	public Categoria update(Categoria obj) {
-		find(obj.getId());
+		Categoria newObj = find(obj.getId());
+		updateData(newObj, obj);
 		return repo.save(obj);
 	}
 	
@@ -60,5 +62,11 @@ public class CategoriaService {
 	
 	public Categoria fromDTO(CategoriaDTO objDto) {
 		return new Categoria(objDto.getId(), objDto.getNome());
+	}
+	
+	public void updateData(Categoria newObj, Categoria obj) {
+		newObj.setNome(obj.getNome());
+		
+		
 	}
 }
