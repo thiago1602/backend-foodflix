@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.thiagomoraes.foodflix.domain.Categoria;
+import com.thiagomoraes.foodflix.dto.CategoriaDTO;
 import com.thiagomoraes.foodflix.repositories.CategoriaRepository;
 import com.thiagomoraes.foodflix.services.exception.DataIntegryException;
 import com.thiagomoraes.foodflix.services.exception.ObjectNotFoundException;
@@ -55,5 +56,9 @@ public class CategoriaService {
 			String direction){
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repo.findAll(pageRequest);
+	}
+	
+	public Categoria fromDTO(CategoriaDTO objDto) {
+		return new Categoria(objDto.getId(), objDto.getNome());
 	}
 }
