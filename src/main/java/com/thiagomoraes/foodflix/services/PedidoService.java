@@ -14,7 +14,6 @@ import com.thiagomoraes.foodflix.domain.enums.EstadoPagamento;
 import com.thiagomoraes.foodflix.repositories.ItemPedidoRepository;
 import com.thiagomoraes.foodflix.repositories.PagamentoRepository;
 import com.thiagomoraes.foodflix.repositories.PedidoRepository;
-import com.thiagomoraes.foodflix.repositories.ProdutoRepository;
 import com.thiagomoraes.foodflix.services.exception.ObjectNotFoundException;
 
 @Service
@@ -29,13 +28,8 @@ public class PedidoService {
 	@Autowired
 	private ProdutoService produtoService;
 	
-	
-	
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
-	
-	@Autowired
-	private ProdutoRepository produtoRepository;
 	
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
@@ -62,7 +56,8 @@ public class PedidoService {
 		pagamentoRepository.save(obj.getPagamento());
 		for(ItemPedido ip : obj.getItens() ) {
 			ip.setDesconto(0.0);
-			ip.setPreco(produtoService.find(ip.getProduto().getId()).getPreco());
+			ip.setProduto(produtoService.find(ip.getProduto().getId()));
+			ip.setPreco(ip.getProduto().getPreco());
 			ip.setPedido(obj);
 		}
 		

@@ -3,8 +3,11 @@ package com.thiagomoraes.foodflix.services;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.springframework.stereotype.Service;
+
 import com.thiagomoraes.foodflix.domain.PagamentoComBoleto;
 
+@Service
 public class BoletoService {
 
 	public void preencherPagamentoComBoleto(
