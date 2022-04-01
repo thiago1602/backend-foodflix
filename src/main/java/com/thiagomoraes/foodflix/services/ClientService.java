@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.thiagomoraes.foodflix.domain.Cidade;
@@ -24,6 +25,9 @@ import com.thiagomoraes.foodflix.services.exception.ObjectNotFoundException;
 @Service
 public class ClientService {
 
+	@Autowired
+	private BCryptPasswordEncoder pe;
+	
 	@Autowired
 	private ClientRepository repo;
 	
@@ -70,7 +74,7 @@ public class ClientService {
 	}
 	
 	public Client fromDTO(ClientDTO objDto) {
-		return new Client (objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null);
+		return new Client (objDto.getId(), objDto.getNome(), objDto.getEmail(), null, null, null);
 	}
 	
 	public void updateData(Client newObj, Client obj) {
@@ -83,7 +87,7 @@ public class ClientService {
 		public Client fromDTO(ClientNewDTO objDto) {
 			Client cli = new Client(null, objDto.getNome(), objDto.getEmail(),					
 					objDto.getCpfOuCnpj(),
-					TipoClient.toEnum(objDto.getTipo()));
+					TipoClient.toEnum(objDto.getTipo()), pe.encode(objDto.getSenha()));
 			Cidade cid = new Cidade();
 			Endereco end = new Endereco(null, objDto.getLogradouro(), 
 					objDto.getNumero(),
