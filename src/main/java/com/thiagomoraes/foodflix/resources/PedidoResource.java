@@ -1,8 +1,6 @@
 package com.thiagomoraes.foodflix.resources;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.validation.Valid;
 
@@ -15,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.thiagomoraes.foodflix.domain.Categoria;
 import com.thiagomoraes.foodflix.domain.Pedido;
-import com.thiagomoraes.foodflix.dto.CategoriaDTO;
 import com.thiagomoraes.foodflix.services.PedidoService;
 
 @RestController

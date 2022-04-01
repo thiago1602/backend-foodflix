@@ -5,13 +5,11 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.thiagomoraes.foodflix.domain.ItemPedido;
 import com.thiagomoraes.foodflix.domain.PagamentoComBoleto;
 import com.thiagomoraes.foodflix.domain.Pedido;
 import com.thiagomoraes.foodflix.domain.enums.EstadoPagamento;
-import com.thiagomoraes.foodflix.repositories.ClientRepository;
 import com.thiagomoraes.foodflix.repositories.ItemPedidoRepository;
 import com.thiagomoraes.foodflix.repositories.PagamentoRepository;
 import com.thiagomoraes.foodflix.repositories.PedidoRepository;
@@ -38,13 +36,16 @@ public class PedidoService {
 	@Autowired
 	private ClientService clientService;
 	
+	@Autowired
+	private EmailService emailService;
+	
 	public Pedido find(Integer id) {
 		Optional<Pedido> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Pedido.class.getName()));
 	}
 	
-	public Pedido insert(Pedido obj) {
+	public Pedido Insert(Pedido obj) {
 		obj.setId(null);
 		obj.setInstante(new Date());
 		obj.setClient(clientService.find(obj.getCliente().getId()));
@@ -63,7 +64,7 @@ public class PedidoService {
 			ip.setPedido(obj);
 		}
 		itemPedidoRepository.saveAll(obj.getItens());
-		System.out.println(obj);
+		emailService.sendOrderConfirmationEmail(obj);;
 		return obj;
 	}
 }
