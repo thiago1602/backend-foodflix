@@ -20,6 +20,7 @@ import com.thiagomoraes.foodflix.domain.PagamentoComCartao;
 import com.thiagomoraes.foodflix.domain.Pedido;
 import com.thiagomoraes.foodflix.domain.Produto;
 import com.thiagomoraes.foodflix.domain.enums.EstadoPagamento;
+import com.thiagomoraes.foodflix.domain.enums.Perfil;
 import com.thiagomoraes.foodflix.domain.enums.TipoClient;
 import com.thiagomoraes.foodflix.repositories.CategoriaRepository;
 import com.thiagomoraes.foodflix.repositories.CidadeRepository;
@@ -115,18 +116,26 @@ public class DBService {
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
 		
-		Client cli1 = new Client(null, "Thiago", "thiagomoraesf@gmail.com", "998897799",
+		Client cli1 = new Client(null, "Thiago", "thiagomoraesf@gmail.com", "42276822854",
 				TipoClient.PESSOAFISICA, pe.encode("1234"));
+		cli1.getTelefones().addAll(Arrays.asList("27363323", "93839393"));
 		
-		cli1.getTelefones().addAll(Arrays.asList("998897799", "998897788"));
+		Client cli2 = new Client(null, "Ana", "ana@gmail.com", "45687987898",
+				TipoClient.PESSOAFISICA, pe.encode("1234"));
+		cli2.getTelefones().addAll(Arrays.asList("27363323", "93839393"));
+		cli2.addPerfil(Perfil.ADMIN);
+		
 		
 		Endereco e1 = new Endereco(null, "Rua Flores", "250", "Apto 203", "Jardim", "38854", cli1, c1);
 		Endereco e2 = new Endereco(null, "Rua Flor", "250", "Apto 203", "Teo", "38854", cli1, c1);
 		
+		Endereco e3 = new Endereco(null, "Rua Flores", "250", "Apto 203", "Jardim", "38854", cli2, c2);
+		Endereco e4 = new Endereco(null, "Rua Flor", "250", "Apto 203", "Teo", "38854", cli2, c2);
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli2.getEnderecos().addAll(Arrays.asList(e3, e4));
 		
-		clientRepository.saveAll(Arrays.asList(cli1));
-		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		clientRepository.saveAll(Arrays.asList(cli1, cli2));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3, e4));
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		
